@@ -8,6 +8,12 @@ class GNULinkerMapParser:
     """
     Parse a GNU linker map file and convert it to a yaml file for further processing
     """
+    # Pre-compile regex patterns as class attributes for efficiency
+    AREAS_PATTERN = re.compile(r'([.][a-z]{1,})[ ]{1,}(0x[a-fA-F0-9]{1,})[ ]{1,}(0x[a-fA-F0-9]{1,})\n')
+    SECTIONS_PATTERN = re.compile(
+        r'\s(\.[^.\s]+)\.([^\s]+)\n\s+(0x[0-9a-fA-F]{16})\s+(0x[0-9a-fA-F]+)\s+[^\n]+\n'
+    )
+
     def __init__(self, input_filename, output_filename):
         self.sections = []
         self.subsections = []
@@ -16,14 +22,27 @@ class GNULinkerMapParser:
 
     def parse(self):
         with open(self.input_filename, 'r', encoding='utf8') as file:
+            content = file.read()
 
-            file_iterator = iter(file)
-            prev_line = next(file_iterator)
-            for line in file_iterator:
-                self.process_areas(prev_line)
-                multiple_line = prev_line + line
-                self.process_sections(multiple_line)
-                prev_line = line
+        # Process areas using finditer on entire content
+        for match in self.AREAS_PATTERN.finditer(content):
+            self.sections.append(Section(
+                parent=None,
+                id=match.group(1),
+                address=int(match.group(2), 0),
+                size=int(match.group(3), 0),
+                _type='area'
+            ))
+
+        # Process sections using finditer on entire content
+        for match in self.SECTIONS_PATTERN.finditer(content):
+            self.subsections.append(Section(
+                parent=match.group(1),
+                id=match.group(2),
+                address=int(match.group(3), 0),
+                size=int(match.group(4), 0),
+                _type='section'
+            ))
 
         my_dict = {'map': []}
         for section in self.sections:
@@ -48,34 +67,3 @@ class GNULinkerMapParser:
         with open(self.output_filename, 'w', encoding='utf8') as file:
             yaml_string = yaml.dump(my_dict)
             file.write(yaml_string)
-
-    def process_areas(self, line):
-        pattern = r'([.][a-z]{1,})[ ]{1,}(0x[a-fA-F0-9]{1,})[ ]{1,}(0x[a-fA-F0-9]{1,})\n'
-
-        p = re.compile(pattern)
-        result = p.search(line)
-
-        if result is not None:
-            self.sections.append(Section(parent=None,
-                                         id=result.group(1),
-                                         address=int(result.group(2), 0),
-                                         size=int(result.group(3), 0),
-                                         _type='area'
-                                         )
-                                 )
-
-    def process_sections(self, line):
-        pattern = r'\s(.[^.]+).([^. \n]+)[\n\r]\s+(0x[0-9a-fA-F]{16})\s+' \
-                  r'(0x[0-9a-fA-F]+)\s+[^\n]+[\n\r]{1}'
-
-        p = re.compile(pattern)
-        result = p.search(line)
-
-        if result is not None:
-            self.subsections.append(Section(parent=result.group(1),
-                                            id=result.group(2),
-                                            address=int(result.group(3), 0),
-                                            size=int(result.group(4), 0),
-                                            _type='section'
-                                            )
-                                    )
