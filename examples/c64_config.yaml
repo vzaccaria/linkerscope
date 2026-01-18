@@ -1,0 +1,142 @@
+size: [900,800]
+
+variables:
+  c64blue: &c64blue '#4040e0'
+  c64lightblue: &c64lightblue '#7878e8'
+  c64darkblue: &c64darkblue '#2020a0'
+  c64brown: &c64brown '#8b4513'
+  c64grey: &c64grey '#808080'
+  c64darkgrey: &c64darkgrey '#505050'
+  c64green: &c64green '#40a040'
+  c64red: &c64red '#e04040'
+  c64purple: &c64purple '#a040a0'
+  c64orange: &c64orange '#e08040'
+  c64yellow: &c64yellow '#e0e040'
+  background: &background '#1a1a2e'
+
+style:
+  text-fill: 'white'
+  break-size: 25
+  break-type: '~'
+  growth-arrow-size: 2
+  growth-arrow-fill: 'white'
+  growth-arrow-stroke: 'black'
+  background: *background
+  fill: *c64blue
+  hide-size: false
+  stroke-width: 1
+  stroke: '#303050'
+  text-stroke: 'black'
+  text-stroke-width: 0.1
+  font-size: 11
+  font_type: 'Helvetica'
+
+areas:
+- area:
+    title: Commodore 64 Memory Map
+    range: [0x0000, 0x10000]
+    pos: [50, 50]
+    size: [200, 700]
+    style:
+      hide-size: false
+
+    sections:
+      - names: [none]
+        style:
+          hide-name: true
+          fill: *c64darkgrey
+
+- area:
+    title: Zero Page & Stack
+    range: [0x0000, 0x0200]
+    pos: [300, 600]
+    size: [200, 150]
+    style:
+      hide-size: false
+
+    sections:
+      - names: [Zero Page]
+        style:
+          fill: *c64red
+      - names: [Stack]
+        style:
+          fill: *c64orange
+
+- area:
+    title: RAM Areas
+    range: [0x0200, 0xA000]
+    pos: [300, 350]
+    size: [200, 200]
+    style:
+      hide-size: false
+
+    sections:
+      - names: [OS/BASIC Work Area]
+        style:
+          fill: *c64brown
+      - names: [Screen RAM]
+        style:
+          fill: *c64yellow
+      - names: [BASIC Program Area]
+        style:
+          fill: *c64green
+
+- area:
+    title: ROM Areas
+    range: [0xA000, 0xC000]
+    pos: [650, 450]
+    size: [200, 150]
+    style:
+      hide-size: false
+
+    sections:
+      - names: [BASIC ROM]
+        style:
+          fill: *c64blue
+
+- area:
+    title: ROM Areas II
+    range: [0xE000, 0x10000]
+    pos: [550, 450]
+    size: [200, 150]
+    style:
+      hide-size: false
+
+    sections:
+      - names: [Kernal ROM]
+        style:
+          fill: *c64lightblue
+- area:
+    title: I/O Area ($D000-$DFFF)
+    range: [0xD000, 0xDFFF]
+    pos: [550, 50]
+    size: [250, 350]
+    style:
+      hide-size: false
+
+    sections:
+      - names: [VIC-II]
+        style:
+          fill: *c64purple
+      - names: [SID]
+        style:
+          fill: *c64red
+      - names: [Color RAM]
+        style:
+          fill: *c64yellow
+      - names: [CIA1]
+        style:
+          fill: *c64green
+      - names: [CIA2]
+        style:
+          fill: *c64orange
+      - names: [I/O Expansion 1, I/O Expansion 2]
+        style:
+          fill: *c64darkgrey
+
+links:
+  style:
+    opacity: 0.2
+    fill: '#a0a0a0'
+    stroke: '#606060'
+  sections: [Zero Page, Stack, Screen RAM, BASIC Program Area, BASIC ROM, Kernal ROM, VIC-II, SID, CIA1, CIA2]

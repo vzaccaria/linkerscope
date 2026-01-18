@@ -1,0 +1,102 @@
+map:
+  # Full 64KB address space
+  - id: none
+    address: 0x0000
+    size:    0x10000
+    type: area
+
+  # Zero Page
+  - id: Zero Page
+    address: 0x0000
+    size:    0x0100
+    type: area
+
+  # Stack
+  - id: Stack
+    address: 0x0100
+    size:    0x0100
+    type: area
+
+  # OS and BASIC work area
+  - id: OS/BASIC Work Area
+    address: 0x0200
+    size:    0x0200
+    type: area
+
+  # Default Screen RAM
+  - id: Screen RAM
+    address: 0x0400
+    size:    0x0400
+    type: area
+
+  # BASIC program area (free RAM)
+  - id: BASIC Program Area
+    address: 0x0800
+    size:    0x9800
+    type: area
+
+  # BASIC ROM (can be banked out for RAM)
+  - id: BASIC ROM
+    address: 0xA000
+    size:    0x2000
+    type: area
+
+  # Upper RAM area
+  - id: Upper RAM
+    address: 0xC000
+    size:    0x1000
+    type: area
+
+  # I/O Area (VIC-II, SID, CIA, etc.)
+  - id: I/O Area
+    address: 0xD000
+    size:    0x1000
+    type: area
+
+  # VIC-II Video Controller
+  - id: VIC-II
+    address: 0xD000
+    size:    0x0400
+    type: area
+
+  # SID Sound Chip
+  - id: SID
+    address: 0xD400
+    size:    0x0400
+    type: area
+
+  # Color RAM
+  - id: Color RAM
+    address: 0xD800
+    size:    0x0400
+    type: area
+
+  # CIA1 (Keyboard, Joystick, Datasette)
+  - id: CIA1
+    address: 0xDC00
+    size:    0x0100
+    type: area
+
+  # CIA2 (Serial Bus, RS-232, NMI)
+  - id: CIA2
+    address: 0xDD00
+    size:    0x0100
+    type: area
+
+  # I/O Expansion 1
+  - id: I/O Expansion 1
+    address: 0xDE00
+    size:    0x0100
+    type: area
+
+  # I/O Expansion 2
+  - id: I/O Expansion 2
+    address: 0xDF00
+    size:    0x0100
+    type: area
+
+  # Kernal ROM
+  - id: Kernal ROM
+    address: 0xE000
+    size:    0x2000
+    type: area
